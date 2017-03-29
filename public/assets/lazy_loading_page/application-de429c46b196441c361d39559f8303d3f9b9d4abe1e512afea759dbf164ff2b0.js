@@ -1,10 +1,7 @@
 ("turbolinks:load DOMContentLoaded ready".split(" ")).forEach(function(e){
-  if (window.lazyLoaderInitialize === undefined) {
-    document.addEventListener(e, function() {
-      lazyLoad();
-    })
-    window.lazyLoaderInitialize = true
-  }
+  document.addEventListener(e, function() {
+    lazyLoad();
+  })
 });
 
 function lazyLoad(){
@@ -60,29 +57,48 @@ function addLoader(ele){
 function ajaxCallback(xhttp, id) {
   var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
   if (xhttp.readyState == 4 && xhttp.status == 200) {
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(xhttp.responseText, "text/html");
-    var newElements = doc.querySelector("body");
     if (window.$ !== undefined){
-    // if (false){
       new_ele = $(xhttp.responseText);
-      if (newElements !== null){
-        new_ele = $(newElements.innerHTML);
-      }
       $(elementToReplace).replaceWith(new_ele);
       $("."+ id).remove();
     }
     else{
       var parentElement = elementToReplace.parentNode;
       var template = document.createElement("template");
-      if (newElements !== null){
-        template.innerHTML = newElements.innerHTML;
-      }
-      else{
-        template.innerHTML = xhttp.responseText;
-      }
+      template.innerHTML = xhttp.responseText;
       var newElement = template.content.firstElementChild;
       parentElement.replaceChild(newElement, elementToReplace);
+      // var parser = new DOMParser();
+      // var doc = parser.parseFromString(xhttp.responseText, "text/html");
+      // var newElements = doc.querySelector("body");
+      // parentElement.replaceChild(newElements, elementToReplace);
+      // while (oldParent.childNodes.length > 0) {
+      //   newParent.appendChild(oldParent.childNodes[0]);
+      // }
+      // if (newElements.firstElementChild !== null){
+      //   var parentElement =  elementToReplace.parentNode;
+      //   var newElement = newElements.firstElementChild;
+      //   parentElement.replaceChild( newElement, elementToReplace);
+      //   while(newElement.nextElementSibling !== null){
+      //     newElement = newElement.nextElementSibling;
+      //     parentElement.appendChild(newElement);
+      //   }
+      // }
     }
   }
 }
+;
+// This is a manifest file that'll be compiled into application.js, which will include all the files
+// listed below.
+//
+// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
+// or any plugin's vendor/assets/javascripts directory can be referenced here using a relative path.
+//
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// compiled file.
+//
+// Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
+// about supported directives.
+//
+
+;

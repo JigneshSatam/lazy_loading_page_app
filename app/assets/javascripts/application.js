@@ -19,6 +19,7 @@
 //= require morris
 //= require sb-admin-2
 //= require timeline
+//= require lazy_loading_page/lazy_load
 //= require_tree .
 
 var MorrisBarReturnObject;

@@ -1,5 +1,5 @@
 PATH
-  remote: /Users/jigneshsatam/Projects/lazy_loading_page
+  remote: /home/baldor/Ubuntu bkp/project/lazy_loading_page
   specs:
     lazy_loading_page (0.0.1)
       rails
@@ -147,7 +147,7 @@ GEM
     turbolinks-source (5.0.0)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
-    uglifier (3.1.10)
+    uglifier (3.1.11)
       execjs (>= 0.3.0, < 3)
     web-console (3.4.0)
       actionview (>= 5.0)
