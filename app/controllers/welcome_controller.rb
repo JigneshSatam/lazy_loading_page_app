@@ -4,6 +4,5 @@ class WelcomeController < ApplicationController
 
   def notifications
     render template: "welcome/notifications", layout: false
-    # render template: "welcome/notifications"
   end
 end

@@ -33,6 +33,9 @@ function loadElement(ele){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){ajaxCallback(xhttp, id);};
   xhttp.open("GET", url, true);
+  xhttp.overrideMimeType('application/javascript');
+  // xhttp.responseType = "javascript";
+  // xhttp.setRequestHeader("Content-type", "application/javascript");
   xhttp.send();
 }
 
@@ -63,8 +66,8 @@ function ajaxCallback(xhttp, id) {
     var parser = new DOMParser();
     var doc = parser.parseFromString(xhttp.responseText, "text/html");
     var newElements = doc.querySelector("body");
-    if (window.$ !== undefined){
-    // if (false){
+    // if (window.$ !== undefined){
+    if (false){
       new_ele = $(xhttp.responseText);
       if (newElements !== null){
         new_ele = $(newElements.innerHTML);
@@ -81,8 +84,17 @@ function ajaxCallback(xhttp, id) {
       else{
         template.innerHTML = xhttp.responseText;
       }
-      var newElement = template.content.firstElementChild;
-      parentElement.replaceChild(newElement, elementToReplace);
+      var childNodes = template.content.childNodes
+      var newElement = elementToReplace
+      for(var i= childNodes.length-1; i>=0 ; i--){
+        newPreviousElement = childNodes[i];
+        parentElement.insertBefore(newPreviousElement, newElement);
+        if(newPreviousElement.nodeName == "SCRIPT"){
+          eval(newPreviousElement.textContent);
+        }
+        newElement = newPreviousElement;
+      }
+      parentElement.removeChild(elementToReplace);
     }
   }
 }
