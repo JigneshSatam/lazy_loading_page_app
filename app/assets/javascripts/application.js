@@ -88,20 +88,6 @@ $(function() {
     resize: true
   });
 
-  MorrisDonutReturnObject = Morris.Donut({
-    element: 'morris-donut-chart',
-    data: [{
-      label: "Download Sales",
-      value: 12
-    }, {
-      label: "In-Store Sales",
-      value: 30
-    }, {
-      label: "Mail-Order Sales",
-      value: 20
-    }],
-    resize: true
-  });
 
   MorrisBarReturnObject = Morris.Bar({
     element: 'morris-bar-chart',
@@ -371,12 +357,12 @@ var allMorrisTableData = {
 
 // This updates the data table beside the Morris.Bar
 function buildTable(localTableDataJson, tagId) {
-  console.log('building table for ' + tagId);
+  // console.log('building table for ' + tagId);
   var content = "";
   var header = "<thead><tr>";
-  console.log(localTableDataJson.headers)
+  // console.log(localTableDataJson.headers)
   for (var index in localTableDataJson.headers) {
-    console.log('added header');
+    // console.log('added header');
     header += "<th>" + localTableDataJson.headers[index] + "</th>";
   }
   header += "</tr></thead>";
@@ -404,26 +390,26 @@ buildTable(allMorrisTableData, 'second-morris-table');
 var previousTagSelected;
 
 function filterBottomMorrisTable(filterString, filterColumn) {
-  console.log('filtering bottom Morris table for ' + filterString + ' in ' + filterColumn);
-  console.log('previous tag: ' + previousTagSelected);
+  // console.log('filtering bottom Morris table for ' + filterString + ' in ' + filterColumn);
+  // console.log('previous tag: ' + previousTagSelected);
   if (filterString != previousTagSelected) {
     $('#second-morris-table > tbody > tr').each(function(index) {
-      console.log('showing row');
+      // console.log('showing row');
       $(this).show();
     });
   }
 
   $('#second-morris-table > tbody > tr').each(
     function(index) {
-      //console.log('table index ' + index);
+      console.log('table index ' + index);
 
       $(this).find('td').each(
         function(index2) {
-          //console.log('column index ' + index2);
+          console.log('column index ' + index2);
           var columnValue = $(this).text();
-          //console.log('columnValue: ' + columnValue);
+          console.log('columnValue: ' + columnValue);
           var columnName = allMorrisTableData.headers[index2];
-          //console.log('column name : ' + columnName);
+          console.log('column name : ' + columnName);
 
           hideMorrisTable2Row($(this), columnName, columnValue, filterColumn, filterString);
 
@@ -434,14 +420,14 @@ function filterBottomMorrisTable(filterString, filterColumn) {
 }
 
 function hideMorrisTable2Row(selection, columnName, columnValue, filterColumn, filterString) {
-  console.log('checking for ' + columnName + ' matching ' + filterColumn);
+  // console.log('checking for ' + columnName + ' matching ' + filterColumn);
   if (columnName != filterColumn) {
-    console.log(columnName + ' does not match' + filterColumn);
+    // console.log(columnName + ' does not match' + filterColumn);
     return;
   }
-  console.log(columnName + ' matches' + filterColumn);
+  // console.log(columnName + ' matches' + filterColumn);
   if ((columnValue != filterString) || (columnValue == '')) {
-    console.log('toggle hiding table row for ' + columnValue);
+    // console.log('toggle hiding table row for ' + columnValue);
     if ($(selection).parent().css('display') == 'none') {
       $(selection).parent().show();
       previousTagSelected = filterString;
@@ -455,7 +441,7 @@ function hideMorrisTable2Row(selection, columnName, columnValue, filterColumn, f
 }
 
 function updateMorrisBar(columnNumber) {
-  console.log("updating morris bar");
+  // console.log("updating morris bar");
   var newJSON = {
     element: 'morris-bar-chart',
     data: [{
@@ -520,22 +506,22 @@ function updateMorrisBar(columnNumber) {
 
 function setFilterForBottomMorrisTable(selectedTag) {
   var tagIndex = $('#morris-bar-chart svg rect').index(selectedTag);
-  console.log('tag index: ' + tagIndex);
+  // console.log('tag index: ' + tagIndex);
   var name = tableDataJson.data[tagIndex]['Directorate or Division'];
-  console.log('Directorate or Division name: ' + name);
+  // console.log('Directorate or Division name: ' + name);
   filterBottomMorrisTable(name, 'Directorate or Division');
   showTotalFTEs();
 }
 
 // shows the total FTEs in the morris donut
 function showTotalFTEs() {
-  console.log('updating donut data');
+  // console.log('updating donut data');
   var totalFTEs = 0;
   var totalAmountWorked = 0;
   var totalResourceCount = 0;
   $('#second-morris-table > tbody > tr').each(
     function(index) {
-      //console.log('table index ' + index);
+      console.log('table index ' + index);
       $(this).find('td').each(
         function(index2) {
           if ($(this).parent().css('display') != 'none') {
@@ -569,11 +555,28 @@ function showTotalFTEs() {
 
   $('#morris-donut-chart').empty();
   Morris.Donut(donutJSON);
-  //MorrisBarReturnObject.setData(newJSON);
-  MorrisDonutReturnObject.setData(donutJSON.data, true);
+  MorrisBarReturnObject.setData(newJSON);
+  // MorrisDonutReturnObject.setData(donutJSON.data, true);
 }
 
 
 function showDefaultDonutData() {
-  console.log('leaving svg donut part');
+  // console.log('leaving svg donut part');
+}
+
+function createDonut(){
+  MorrisDonutReturnObject = Morris.Donut({
+    element: 'morris-donut-chart',
+    data: [{
+      label: "Download Sales",
+      value: 12
+    }, {
+      label: "In-Store Sales",
+      value: 30
+    }, {
+      label: "Mail-Order Sales",
+      value: 20
+    }],
+    resize: true
+  });
 }

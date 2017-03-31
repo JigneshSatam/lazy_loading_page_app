@@ -13,7 +13,6 @@ function lazyLoad(){
     (function(i){
       $lazy_loader = $lazy_loaders[i];
       loadElement($lazy_loader);
-      // xhttp.setRequestHeader("Content-type", "application/js");
       // $.ajax({
       //  $lazy_loader.getAttribute("data-id")
       //  url = $lazy_loader.getAttribute("data-url")
@@ -33,7 +32,10 @@ function loadElement(ele){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){ajaxCallback(xhttp, id);};
   xhttp.open("GET", url, true);
-  xhttp.overrideMimeType('application/javascript');
+  xhttp.setRequestHeader('Accept', 'text/javascript');
+  xhttp.setRequestHeader("X-CSRF-Token", document.querySelector("[name='csrf-token']").content);
+  // xhttp.setRequestHeader("Content-type", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
+  // xhttp.overrideMimeType("text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
   // xhttp.responseType = "javascript";
   // xhttp.setRequestHeader("Content-type", "application/javascript");
   xhttp.send();
@@ -86,15 +88,24 @@ function ajaxCallback(xhttp, id) {
       }
       var childNodes = template.content.childNodes
       var newElement = elementToReplace
+      var scriptTags = [];
       for(var i= childNodes.length-1; i>=0 ; i--){
         newPreviousElement = childNodes[i];
         parentElement.insertBefore(newPreviousElement, newElement);
         if(newPreviousElement.nodeName == "SCRIPT"){
-          eval(newPreviousElement.textContent);
+          scriptTags.push(newPreviousElement.textContent);
+          eval();
         }
         newElement = newPreviousElement;
       }
       parentElement.removeChild(elementToReplace);
+      runScripts(scriptTags);
     }
   }
+}
+
+function runScripts(scriptTags){
+  scriptTags.forEach( function(scriptTag){
+    eval(scriptTag)
+  });
 }
