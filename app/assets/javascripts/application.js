@@ -19,7 +19,7 @@
 //= require morris
 //= require sb-admin-2
 //= require timeline
-//= require lazy_load
+//= require lazy_loading_page/lazy_load
 //= require_tree .
 
 var MorrisBarReturnObject;
@@ -556,7 +556,7 @@ function showTotalFTEs() {
   $('#morris-donut-chart').empty();
   Morris.Donut(donutJSON);
   MorrisBarReturnObject.setData(newJSON);
-  // MorrisDonutReturnObject.setData(donutJSON.data, true);
+  MorrisDonutReturnObject.setData(donutJSON.data, true);
 }
 
 

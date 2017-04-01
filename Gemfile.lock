@@ -1,5 +1,5 @@
 PATH
-  remote: /home/baldor/Ubuntu bkp/project/lazy_loading_page
+  remote: /Users/jigneshsatam/Projects/lazy_loading_page
   specs:
     lazy_loading_page (0.0.1)
       rails

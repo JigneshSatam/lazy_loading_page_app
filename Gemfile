@@ -54,5 +54,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'haml'
 
-# gem "lazy_loading_page", path: "/Users/jigneshsatam/Projects/lazy_loading_page/"
-gem "lazy_loading_page", path: "/home/baldor/Ubuntu bkp/project/lazy_loading_page"
+gem "lazy_loading_page", path: "/Users/jigneshsatam/Projects/lazy_loading_page/"
+# gem "lazy_loading_page", path: "/home/baldor/Ubuntu bkp/project/lazy_loading_page"

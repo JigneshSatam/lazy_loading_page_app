@@ -8,15 +8,11 @@
 });
 
 function lazyLoad(){
-  var $lazy_loaders = document.querySelectorAll(".lazy_load:not([data-later='true'])");
+  var $lazy_loaders = document.querySelectorAll(".lazy_load:not([data-later='true']):not([data-loading='started'])");
   for (var i = 0; i < $lazy_loaders.length; i++) {
     (function(i){
       $lazy_loader = $lazy_loaders[i];
       loadElement($lazy_loader);
-      // $.ajax({
-      //  $lazy_loader.getAttribute("data-id")
-      //  url = $lazy_loader.getAttribute("data-url")
-      // });
     })(i);
   };
 }
@@ -32,22 +28,21 @@ function loadElement(ele){
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function(){ajaxCallback(xhttp, id);};
   xhttp.open("GET", url, true);
-  xhttp.setRequestHeader('Accept', 'text/javascript');
-  xhttp.setRequestHeader("X-CSRF-Token", document.querySelector("[name='csrf-token']").content);
-  // xhttp.setRequestHeader("Content-type", "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
-  // xhttp.overrideMimeType("text/javascript, application/javascript, application/ecmascript, application/x-ecmascript");
-  // xhttp.responseType = "javascript";
-  // xhttp.setRequestHeader("Content-type", "application/javascript");
+  if (ele.getAttribute("data-type") == "script")
+    xhttp.setRequestHeader('Accept', 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*');
+  // xhttp.setRequestHeader("X-CSRF-Token", document.querySelector("[name='csrf-token']").content);
+  xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
   xhttp.send();
+  ele.setAttribute("data-loading", "started");
 }
 
 function addLoader(ele){
-  // var loader_img = $("<div class='"+id+"' style='height: 40px; width: 100%;'><div class='uil-ellipsis-css'><div class='ib'><div class='circle'><div></div></div><div class='circle'><div></div></div><div class='circle'><div></div></div><div class='circle'><div></div></div><div class='clear'></div></div></div></div>")
-  // var loader_img = $('<div class="loading-container" data-id="'+id+'"><span class="loading-indicator"><i></i><i></i><i></i></span></div>');
-  // $($lazy_loader).parent().append(loader_img);
   var loader_img = document.createElement("div");
   loader_img.setAttribute("class", "loading-container")
   loader_img.setAttribute("data-id", ele.getAttribute("data-id"));
+  if (["script", "json"].indexOf(ele.getAttribute("data-type")) >= 0)
+    loader_img.setAttribute("data-type", ele.getAttribute("data-type"));
+
   var span = document.createElement("span");
   span.setAttribute("class", "loading-indicator")
   for(var j=0; j<3; j++){
@@ -57,50 +52,57 @@ function addLoader(ele){
   loader_img.appendChild(span)
   ele.parentElement.replaceChild(loader_img, ele);
   loader_img.appendChild(ele);
-  // var loader_img = $('<div class="loading-container" data-id="'+ele.getAttribute("data-id")+'"><span class="loading-indicator"><i></i><i></i><i></i></span></div>');
-  // $(ele).replaceWith(loader_img);
-  // loader_img.append($(ele));
 }
 
 function ajaxCallback(xhttp, id) {
-  var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
   if (xhttp.readyState == 4 && xhttp.status == 200) {
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(xhttp.responseText, "text/html");
-    var newElements = doc.querySelector("body");
-    // if (window.$ !== undefined){
-    if (false){
-      new_ele = $(xhttp.responseText);
-      if (newElements !== null){
-        new_ele = $(newElements.innerHTML);
-      }
-      $(elementToReplace).replaceWith(new_ele);
-      $("."+ id).remove();
+    var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
+    var parentElement = elementToReplace.parentNode;
+    if (elementToReplace.getAttribute("data-type") == "script"){
+    // if(true){
+      newScript = document.createElement("script");
+      newScript.innerHTML = xhttp.responseText;
+      parentElement.insertBefore(newScript, elementToReplace);
+      parentElement.removeChild(elementToReplace);
     }
     else{
-      var parentElement = elementToReplace.parentNode;
-      var template = document.createElement("template");
-      if (newElements !== null){
-        template.innerHTML = newElements.innerHTML;
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(xhttp.responseText, "text/html");
+      var newElements = doc.querySelector("body");
+      if (window.$ !== undefined){
+      // if (false){
+        new_ele = $(xhttp.responseText);
+        if (newElements !== null){
+          new_ele = $(newElements.innerHTML);
+        }
+        $(elementToReplace).replaceWith(new_ele);
+        $("."+ id).remove();
       }
       else{
-        template.innerHTML = xhttp.responseText;
-      }
-      var childNodes = template.content.childNodes
-      var newElement = elementToReplace
-      var scriptTags = [];
-      for(var i= childNodes.length-1; i>=0 ; i--){
-        newPreviousElement = childNodes[i];
-        parentElement.insertBefore(newPreviousElement, newElement);
-        if(newPreviousElement.nodeName == "SCRIPT"){
-          scriptTags.push(newPreviousElement.textContent);
-          eval();
+        var template = document.createElement("template");
+        if (newElements !== null){
+          template.innerHTML = newElements.innerHTML;
         }
-        newElement = newPreviousElement;
+        else{
+          template.innerHTML = xhttp.responseText;
+        }
+        var childNodes = template.content.childNodes
+        var newElement = elementToReplace
+        var scriptTags = [];
+        for(var i= childNodes.length-1; i>=0 ; i--){
+          newPreviousElement = childNodes[i];
+          parentElement.insertBefore(newPreviousElement, newElement);
+          if(newPreviousElement.nodeName == "SCRIPT"){
+            scriptTags.push(newPreviousElement.textContent);
+            eval();
+          }
+          newElement = newPreviousElement;
+        }
+        runScripts(scriptTags);
+        parentElement.removeChild(elementToReplace);
       }
-      parentElement.removeChild(elementToReplace);
-      runScripts(scriptTags);
     }
+    lazyLoad();
   }
 }
 
