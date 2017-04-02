@@ -320,7 +320,7 @@
         / /.panel
       / /.col-lg-8
       .col-lg-4#right_pane
-        = lazy_load(notifications_path, type: "script");
+        = lazy_load(notifications_path, type: "script", success: "successCallback();");
       / /.col-lg-4
     / /.row
   / /#page-wrapper

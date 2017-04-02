@@ -41,7 +41,8 @@ function addLoader(ele){
   loader_img.setAttribute("data-id", ele.getAttribute("data-id"));
   if (["script", "json"].indexOf(ele.getAttribute("data-type")) >= 0)
     loader_img.setAttribute("data-type", ele.getAttribute("data-type"));
-
+  if (ele.getAttribute("data-success") != null)
+    loader_img.setAttribute("data-success", ele.getAttribute("data-success"));
   var span = document.createElement("span");
   span.setAttribute("class", "loading-indicator");
   for(var j=0; j<3; j++){
@@ -80,43 +81,10 @@ function requestSuccess(xhttp, id){
     javascriptResponseActions(xhttp, parentElement, elementToReplace);
   }
   else{
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(xhttp.responseText, "text/html");
-    var newElements = doc.querySelector("body");
-    if (window.$ !== undefined){
-    // if (false){
-      new_ele = $(xhttp.responseText);
-      if (newElements !== null){
-        new_ele = $(newElements.innerHTML);
-      }
-      $(elementToReplace).replaceWith(new_ele);
-      $("."+ id).remove();
-    }
-    else{
-      var template = document.createElement("template");
-      if (newElements !== null){
-        template.innerHTML = newElements.innerHTML;
-      }
-      else{
-        template.innerHTML = xhttp.responseText;
-      }
-      var childNodes = template.content.childNodes
-      var newElement = elementToReplace
-      var scriptTags = [];
-      for(var i= childNodes.length-1; i>=0 ; i--){
-        newPreviousElement = childNodes[i];
-        parentElement.insertBefore(newPreviousElement, newElement);
-        if(newPreviousElement.nodeName == "SCRIPT"){
-          scriptTags.push(newPreviousElement.textContent);
-          eval();
-        }
-        newElement = newPreviousElement;
-      }
-      runScripts(scriptTags);
-      parentElement.removeChild(elementToReplace);
-    }
+    plainResponseActions(xhttp, id, parentElement, elementToReplace);
   }
   lazyLoad();
+  callbackFor(elementToReplace, "success");
 }
 
 // function requestFailure(xhttp, id){
@@ -130,8 +98,51 @@ function javascriptResponseActions(xhttp, parentElement, elementToReplace){
   parentElement.removeChild(elementToReplace);
 }
 
+function plainResponseActions(xhttp, id, parentElement, elementToReplace){
+  var parser = new DOMParser();
+  var doc = parser.parseFromString(xhttp.responseText, "text/html");
+  var newElements = doc.querySelector("body");
+  if (window.$ !== undefined){
+  // if (false){
+    new_ele = $(xhttp.responseText);
+    if (newElements !== null){
+      new_ele = $(newElements.innerHTML);
+    }
+    $(elementToReplace).replaceWith(new_ele);
+    $("."+ id).remove();
+  }
+  else{
+    var template = document.createElement("template");
+    if (newElements !== null){
+      template.innerHTML = newElements.innerHTML;
+    }
+    else{
+      template.innerHTML = xhttp.responseText;
+    }
+    var childNodes = template.content.childNodes
+    var newElement = elementToReplace
+    var scriptTags = [];
+    for(var i= childNodes.length-1; i>=0 ; i--){
+      newPreviousElement = childNodes[i];
+      parentElement.insertBefore(newPreviousElement, newElement);
+      if(newPreviousElement.nodeName == "SCRIPT"){
+        scriptTags.push(newPreviousElement.textContent);
+        eval();
+      }
+      newElement = newPreviousElement;
+    }
+    runScripts(scriptTags);
+    parentElement.removeChild(elementToReplace);
+  }
+}
+
 function runScripts(scriptTags){
   scriptTags.forEach( function(scriptTag){
     eval(scriptTag)
   });
+}
+
+function callbackFor(ele, option){
+  var userFunction = ele.getAttribute("data-"+ option);
+  eval(userFunction);
 }
