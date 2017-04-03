@@ -84,7 +84,7 @@ function requestSuccess(xhttp, id){
     plainResponseActions(xhttp, id, parentElement, elementToReplace);
   }
   lazyLoad();
-  callbackFor(elementToReplace, "success");
+  callbackFor(elementToReplace, "success", xhttp);
 }
 
 // function requestFailure(xhttp, id){
@@ -142,7 +142,12 @@ function runScripts(scriptTags){
   });
 }
 
-function callbackFor(ele, option){
+function callbackFor(ele, option, xhttp){
   var userFunction = ele.getAttribute("data-"+ option);
-  eval(userFunction);
+  if (userFunction !== null){
+    userFunction_array = userFunction.split("(");
+    var extract_attributes = userFunction_array[1].split(")")[0];
+    var function_name = userFunction_array[0];
+    eval(function_name).call(xhttp, extract_attributes);
+  }
 }

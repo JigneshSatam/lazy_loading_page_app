@@ -581,7 +581,7 @@ function createDonut(){
   });
 }
 
-function successCallback(){
-  debugger
-  console.log("Request is successfull.")
+function successCallback(user_hash){
+  console.log("Success callback.");
+  console.log(user_hash);
 }
