@@ -7,6 +7,7 @@ class WelcomeController < ApplicationController
   end
 
   def chats
+    raise
     # render template: "welcome/notifications", layout: false
   end
 end

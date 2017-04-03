@@ -581,7 +581,20 @@ function createDonut(){
   });
 }
 
-function successCallback(user_hash){
+function successCallback(arg1, arg2){
   console.log("Success callback.");
-  console.log(user_hash);
+  console.log(arg1);
+  console.log(arg2);
+}
+
+function completeCallback(arg1, arg2){
+  console.log("Complete callback.");
+  console.log(arg1);
+  console.log(arg2);
+}
+
+function failureCallback(arg1, arg2){
+  console.log("Failure callback.");
+  console.log(arg1);
+  console.log(arg2);
 }

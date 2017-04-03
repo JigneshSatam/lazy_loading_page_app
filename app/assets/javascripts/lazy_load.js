@@ -43,6 +43,10 @@ function addLoader(ele){
     loader_img.setAttribute("data-type", ele.getAttribute("data-type"));
   if (ele.getAttribute("data-success") != null)
     loader_img.setAttribute("data-success", ele.getAttribute("data-success"));
+  if (ele.getAttribute("data-failure") != null)
+    loader_img.setAttribute("data-failure", ele.getAttribute("data-failure"));
+  if (ele.getAttribute("data-complete") != null)
+    loader_img.setAttribute("data-complete", ele.getAttribute("data-complete"));
   var span = document.createElement("span");
   span.setAttribute("class", "loading-indicator");
   for(var j=0; j<3; j++){
@@ -55,36 +59,45 @@ function addLoader(ele){
 }
 
 function ajaxCallback(xhttp, id) {
+  var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
   if (xhttp.readyState == XMLHttpRequest.DONE){
-    requestComplete(xhttp, id);
-    // Call complete Callback
+    requestComplete(xhttp, elementToReplace);
+    callbackFor(elementToReplace, "complete", xhttp);
   }
+  // switch(xhttp.readyState) {
+  //   case XMLHttpRequest.DONE:
+  //     code block
+  //     break;
+  //   case n:
+  //     code block
+  //     break;
+  //   default:
+  //     code block
+  // }
 }
 
-function requestComplete(xhttp, id){
+function requestComplete(xhttp, elementToReplace){
   if (xhttp.status == 200) {
-    requestSuccess(xhttp, id);
-    // Call success Callback
+    requestSuccess(xhttp, elementToReplace);
+    callbackFor(elementToReplace, "success", xhttp);
   }
   else{
     // Falilure Code
     // requestFailure(xhttp, id)
-    // Call failure Callback
+    callbackFor(elementToReplace, "failure", xhttp);
   }
 }
 
-function requestSuccess(xhttp, id){
-  var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
+function requestSuccess(xhttp, elementToReplace){
   var parentElement = elementToReplace.parentNode;
   if (elementToReplace.getAttribute("data-type") == "script"){
   // if(true){
     javascriptResponseActions(xhttp, parentElement, elementToReplace);
   }
   else{
-    plainResponseActions(xhttp, id, parentElement, elementToReplace);
+    plainResponseActions(xhttp, parentElement, elementToReplace);
   }
   lazyLoad();
-  callbackFor(elementToReplace, "success", xhttp);
 }
 
 // function requestFailure(xhttp, id){
@@ -98,7 +111,7 @@ function javascriptResponseActions(xhttp, parentElement, elementToReplace){
   parentElement.removeChild(elementToReplace);
 }
 
-function plainResponseActions(xhttp, id, parentElement, elementToReplace){
+function plainResponseActions(xhttp, parentElement, elementToReplace){
   var parser = new DOMParser();
   var doc = parser.parseFromString(xhttp.responseText, "text/html");
   var newElements = doc.querySelector("body");
@@ -109,7 +122,6 @@ function plainResponseActions(xhttp, id, parentElement, elementToReplace){
       new_ele = $(newElements.innerHTML);
     }
     $(elementToReplace).replaceWith(new_ele);
-    $("."+ id).remove();
   }
   else{
     var template = document.createElement("template");
@@ -145,9 +157,10 @@ function runScripts(scriptTags){
 function callbackFor(ele, option, xhttp){
   var userFunction = ele.getAttribute("data-"+ option);
   if (userFunction !== null){
-    userFunction_array = userFunction.split("(");
-    var extract_attributes = userFunction_array[1].split(")")[0];
-    var function_name = userFunction_array[0];
-    eval(function_name).call(xhttp, extract_attributes);
+    userFunctionArray = userFunction.split("(");
+    var extractAttributes = userFunctionArray[1].split(")")[0];
+    var attributes = extractAttributes.split(",").map(function(arg){return arg.trim()})
+    var functionName = userFunctionArray[0];
+    eval(functionName).call(xhttp, ...attributes);
   }
 }
