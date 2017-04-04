@@ -36,6 +36,8 @@ function loadElement(ele){
 }
 
 function addLoader(ele){
+  if (document.querySelector("[data-id='"+ ele.getAttribute("data-id") +"'][class='loading-container']"))
+    return false;
   var loader_img = document.createElement("div");
   loader_img.setAttribute("class", "loading-container");
   loader_img.setAttribute("data-id", ele.getAttribute("data-id"));
@@ -60,30 +62,38 @@ function addLoader(ele){
 
 function ajaxCallback(xhttp, id) {
   var elementToReplace = document.querySelectorAll("[data-id='"+id+"']")[0];
-  if (xhttp.readyState == XMLHttpRequest.DONE){
-    requestComplete(xhttp, elementToReplace);
-    callbackFor(elementToReplace, "complete", xhttp);
+  switch(xhttp.readyState) {
+    case XMLHttpRequest.UNSENT:
+      // code block
+      break;
+    case XMLHttpRequest.OPENED:
+      // code block
+      break;
+    case XMLHttpRequest.HEADERS_RECEIVED:
+      // code block
+      break;
+    case XMLHttpRequest.LOADING:
+      // code block
+      break;
+    case XMLHttpRequest.DONE:
+      requestComplete(xhttp, elementToReplace);
+      callbackFor(elementToReplace, "complete", xhttp);
+      break;
+    default:
+      requestComplete(xhttp, elementToReplace);
+      callbackFor(elementToReplace, "complete", xhttp);
+      break;
   }
-  // switch(xhttp.readyState) {
-  //   case XMLHttpRequest.DONE:
-  //     code block
-  //     break;
-  //   case n:
-  //     code block
-  //     break;
-  //   default:
-  //     code block
-  // }
 }
 
 function requestComplete(xhttp, elementToReplace){
+  debugger
   if (xhttp.status == 200) {
     requestSuccess(xhttp, elementToReplace);
     callbackFor(elementToReplace, "success", xhttp);
   }
   else{
-    // Falilure Code
-    // requestFailure(xhttp, id)
+    requestFailure(xhttp, elementToReplace)
     callbackFor(elementToReplace, "failure", xhttp);
   }
 }
@@ -100,9 +110,10 @@ function requestSuccess(xhttp, elementToReplace){
   lazyLoad();
 }
 
-// function requestFailure(xhttp, id){
-
-// }
+function requestFailure(xhttp, elementToReplace){
+  // if elementToReplace.classList
+  // loadElement(elementToReplace);
+}
 
 function javascriptResponseActions(xhttp, parentElement, elementToReplace){
   var newScript = document.createElement("script");

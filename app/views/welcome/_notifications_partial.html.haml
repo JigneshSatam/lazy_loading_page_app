@@ -112,7 +112,7 @@
             Sign Out
   / /.panel-heading
   .panel-body
-    = lazy_load(chats_path)
+    = lazy_load(chats_path, failure: "failureCallback(failure, callback)");
     / %ul.chat
     /   %li.left.clearfix
     /     %span.chat-img.pull-left
