@@ -29,7 +29,9 @@ function loadElement(ele){
   xhttp.open("GET", url, true);
   if (ele.getAttribute("data-type") == "script")
     xhttp.setRequestHeader('Accept', 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*');
-  // xhttp.setRequestHeader("X-CSRF-Token", document.querySelector("[name='csrf-token']").content);
+  if (ele.getAttribute("data-type") == "json")
+    xhttp.setRequestHeader('Accept', "application/json, text/javascript, */*");
+  xhttp.setRequestHeader("X-CSRF-Token", document.querySelector("[name='csrf-token']").content);
   xhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
   xhttp.send();
   ele.setAttribute("data-loading", "started");
@@ -87,7 +89,6 @@ function ajaxCallback(xhttp, id) {
 }
 
 function requestComplete(xhttp, elementToReplace){
-  debugger
   if (xhttp.status == 200) {
     requestSuccess(xhttp, elementToReplace);
     callbackFor(elementToReplace, "success", xhttp);
@@ -104,6 +105,10 @@ function requestSuccess(xhttp, elementToReplace){
   // if(true){
     javascriptResponseActions(xhttp, parentElement, elementToReplace);
   }
+  else if(elementToReplace.getAttribute("data-type") == "json"){
+    // JSON.parse(xhttp.response);
+    parentElement.removeChild(elementToReplace);
+  }
   else{
     plainResponseActions(xhttp, parentElement, elementToReplace);
   }
@@ -111,8 +116,9 @@ function requestSuccess(xhttp, elementToReplace){
 }
 
 function requestFailure(xhttp, elementToReplace){
-  // if elementToReplace.classList
-  // loadElement(elementToReplace);
+  if (elementToReplace.classList.contains("loading-container"))
+    elementToReplace = elementToReplace.querySelector('.lazy_load')
+  loadElement(elementToReplace);
 }
 
 function javascriptResponseActions(xhttp, parentElement, elementToReplace){

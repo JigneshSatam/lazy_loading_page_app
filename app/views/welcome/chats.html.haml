@@ -1,7 +1,7 @@
 %ul.chat
   %li.left.clearfix
-    %span.chat-img.pull-left
-      %img.img-circle{:alt => "User Avatar", :src => "http://placehold.it/50/55C1E7/fff"}/
+    %span.chat-img.pull-left#first_face
+      = lazy_load(get_classes_path(ele_id: "first_face"), type: "json", success: "add_fa_class();")
     .chat-body.clearfix
       .header
         %strong.primary-font Jack Sparrow
@@ -11,8 +11,8 @@
       %p
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
   %li.right.clearfix
-    %span.chat-img.pull-right
-      %img.img-circle{:alt => "User Avatar", :src => "http://placehold.it/50/FA6F57/fff"}/
+    %span.chat-img.pull-right#fourth_face
+      = lazy_load(get_classes_path(ele_id: "fourth_face"), type: "json", success: "add_fa_class();")
     .chat-body.clearfix
       .header
         %small.text-muted
@@ -22,8 +22,8 @@
       %p
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
   %li.left.clearfix
-    %span.chat-img.pull-left
-      %img.img-circle{:alt => "User Avatar", :src => "http://placehold.it/50/55C1E7/fff"}/
+    %span.chat-img.pull-left#second_face
+      = lazy_load(get_classes_path(ele_id: "second_face"), type: "json", success: "add_fa_class();")
     .chat-body.clearfix
       .header
         %strong.primary-font Jack Sparrow
@@ -33,8 +33,8 @@
       %p
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare dolor, quis ullamcorper ligula sodales.
   %li.right.clearfix
-    %span.chat-img.pull-right
-      %img.img-circle{:alt => "User Avatar", :src => "http://placehold.it/50/FA6F57/fff"}/
+    %span.chat-img.pull-right#third_face
+      = lazy_load(get_classes_path(ele_id: "third_face"), type: "json", success: "add_fa_class();")
     .chat-body.clearfix
       .header
         %small.text-muted

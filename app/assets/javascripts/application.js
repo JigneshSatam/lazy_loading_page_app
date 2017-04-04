@@ -598,3 +598,9 @@ function failureCallback(arg1, arg2){
   console.log(arg1);
   console.log(arg2);
 }
+
+function add_fa_class(){
+  var response = this.response
+  response = JSON.parse(response);
+  $("#"+response.ele_id).append("<i class='fa fa-3x "+response.fa_class+"'></i>");
+}

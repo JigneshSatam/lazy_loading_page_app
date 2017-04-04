@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root 'welcome#dashboard'
   get "notifications" => "welcome#notifications"
   get "chats" => "welcome#chats"
+  get "get_classes" => "welcome#get_classes"
 end
