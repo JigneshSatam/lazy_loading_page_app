@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/JigneshSatam/lazy_loading_page.git
-  revision: a3c08305ebe7207b6261a22d1aa58e3d4ce8b40a
+  revision: 98c94da270c356af91feab30d81f85bb7f499340
   specs:
     lazy_loading_page (0.0.1)
       rails
