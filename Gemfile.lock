@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/JigneshSatam/lazy_loading_page.git
+  revision: eee72cda1ce48eef4272d261c91f5a354b0ecffb
+  specs:
+    lazy_loading_page (0.0.1)
+      rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -161,6 +168,7 @@ DEPENDENCIES
   haml
   jbuilder (~> 2.5)
   jquery-rails
+  lazy_loading_page!
   listen (~> 3.0.5)
   pg
   puma (~> 3.0)
