@@ -15,7 +15,7 @@
  *= require sb-admin-2
  *= require morris
  *= require timeline
- *= require lazy_loading_page/lazy_load
+ *= require lazy_load
  *= require_tree .
  *= require_self
  */

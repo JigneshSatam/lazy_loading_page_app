@@ -1,5 +1,6 @@
-PATH
-  remote: /Users/jigneshsatam/Projects/lazy_loading_page
+GIT
+  remote: https://github.com/JigneshSatam/lazy_loading_page.git
+  revision: c770d60b1cef9dbf907c7b72350818e5540c4b87
   specs:
     lazy_loading_page (0.0.1)
       rails
