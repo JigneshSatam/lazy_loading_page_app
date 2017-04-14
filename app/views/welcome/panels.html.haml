@@ -1,0 +1,18 @@
+.row
+  .col-lg-3.col-md-6
+    = lazy_load(single_panel_path(page: 1))
+  .col-lg-3.col-md-6
+    = lazy_load(single_panel_path(page: 2))
+  .col-lg-3.col-md-6
+    = lazy_load(single_panel_path(page: 3))
+  .col-lg-3.col-md-6
+    = lazy_load(single_panel_path(page: 4))
+/ /.row
+
+.row
+  .col-lg-8
+    = lazy_load(area_chart_path, complete: "load_graph();", later: true, class: "data_row")
+  / /.col-lg-8
+  .col-lg-4#right_pane
+    = lazy_load(notifications_path, type: "script", success: "successCallback(Hi, Dude);", complete: "completeCallback(complete callback)", failure: "failureCallback(failure, callback)", later: true, class: "data_row")
+  / /.col-lg-4

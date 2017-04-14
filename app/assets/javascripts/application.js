@@ -25,8 +25,7 @@
 var MorrisBarReturnObject;
 var MorrisDonutReturnObject;
 
-$(function() {
-
+function load_graph() {
   Morris.Area({
     element: 'morris-area-chart',
     data: [{
@@ -134,7 +133,8 @@ $(function() {
     });
   });
 
-});
+
+}
 
 var tableDataJson = {
   "headers": ["Directorate or Division", "Actual Work", "FTEs", "Resource Count"],
@@ -579,6 +579,12 @@ function createDonut(){
     }],
     resize: true
   });
+}
+
+function load_data_row(){
+  setTimeout(function(){
+    delayedLoading($(".data_row"));
+  }, 1000);
 }
 
 function successCallback(arg1, arg2){

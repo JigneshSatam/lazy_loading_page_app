@@ -2,6 +2,20 @@ class WelcomeController < ApplicationController
   def dashboard
   end
 
+  def panels
+    sleep 0.25
+  end
+
+  def single_panel
+    params[:page] = 1 if params[:page].blank?
+    sleep 0.5
+    render template: "welcome/single_panel", layout: false
+  end
+
+  def area_chart
+    sleep 1
+  end
+
   def notifications
     sleep 2
     # render template: "welcome/notifications", layout: false
