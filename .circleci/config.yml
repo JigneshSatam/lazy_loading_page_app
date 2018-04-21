@@ -59,3 +59,17 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+  print_test:
+    docker:
+      - image: circleci/ruby:2.3-node
+    steps:
+      - run:
+        name: "Printing test"
+        command: |
+          echo "TEST Printed."
+workflows:
+  version: 2
+  one_and_two:
+    jobs:
+      - build
+      - print_test
