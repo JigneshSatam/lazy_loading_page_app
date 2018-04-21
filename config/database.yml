@@ -9,13 +9,19 @@ default: &default
   pool: 5
   timeout: 5000
   encoding: utf8
+  port: 5432
+  host: <%= ENV['DB_HOST']%>
+  username: <%= ENV['USERNAME'] %>
 
 development:
   <<: *default
   database: lazy_loading_page_development
-  host: localhost
-  username: baldor
-  password: baldor123
+  # host: db
+  # host: docker.for.mac.localhost
+  # username: baldor
+  # host: localhost
+  # password: baldor123
+  password: <%= ENV['PASSWORD']%>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
