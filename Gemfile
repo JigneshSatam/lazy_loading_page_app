@@ -55,6 +55,10 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'haml'
 
+group :development, :test do
+  gem 'rspec-rails', '~> 3.7'
+end
+
 gem "lazy_load-rails"
 # gem "lazy_loading_page"
 # gem "lazy_loading_page", path: "/Users/jigneshsatam/Projects/lazy_loading_page/"
