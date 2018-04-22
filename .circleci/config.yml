@@ -68,13 +68,15 @@ jobs:
     docker:
       - image: circleci/ruby:2.3-node
     steps:
-      - run: echo "TEST Printed."
-        # name: "Printing test"
-        # command: |
+      - run:
+        name: "Printing test"
+        command: 'echo "TEST Printed."'
 
 workflows:
   version: 2
   one_and_two:
     jobs:
       - build
-      - print_test
+      - print_test:
+        requires:
+          - build
