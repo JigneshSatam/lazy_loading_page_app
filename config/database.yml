@@ -12,6 +12,7 @@ default: &default
   port: 5432
   host: <%= ENV['DB_HOST']%>
   username: <%= ENV['USERNAME'] %>
+  password: <%= ENV['PASSWORD']%>
 
 development:
   <<: *default
