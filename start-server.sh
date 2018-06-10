@@ -27,8 +27,21 @@ while read p; do
 done < ./.env
 echo "#############################################"
 echo
+
+echo "#############################################"
+echo "              Creating Database              "
+bundle exec rake db:create
+echo "#############################################"
+echo
+
+echo "#############################################"
+echo "              Migrating Database             "
+bundle exec rake db:migrate
+echo "#############################################"
+echo
+
 echo "#############################################"
 echo "               Starting server               "
 echo "#############################################"
-echo ""
+echo
 bundle exec rails s -p $PORT -b '0.0.0.0'
