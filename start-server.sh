@@ -1,15 +1,4 @@
 #!/bin/bash
-# echo "Running db:create"
-# bundle exec rake db:create
-# echo "Running db:migrate"
-# bundle exec rake db:migrate
-
-# sh ./set-env.sh
-# export PORT=5000
-# export DB_HOST=host.docker.internal
-# export USERNAME=baldor
-# export PASSWORD=baldor123
-# cat ./.env
 if [ -f ./tmp/pids/server.pid ]
 then
   echo "#############################################"
@@ -21,10 +10,9 @@ fi
 
 echo "#############################################"
 echo "        Setting Environment Variables        "
-while read p; do
-  export $p
-  echo $p
-done < ./.env
+
+echo "PORT: $PORT"
+echo "Database url: $DATABASE_URL"
 echo "#############################################"
 echo
 
